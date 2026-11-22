@@ -710,12 +710,12 @@ if st.button("Analyze Signal for Anomalies",
     except Exception as error:
         st.error(f"Analysis failed: {error}")
 
-
-# ==========================================
+        # ==========================================
 # RECORDED IQ SIGNAL ANALYSIS
 # ==========================================
 
 import h5py
+import os
 
 st.divider()
 st.header("Recorded IQ Signal Analysis")
@@ -726,57 +726,65 @@ st.write(
 
 train_file = "dataset/subset_train.h5"
 
-try:
-    with h5py.File(train_file, "r") as data:
-        total_samples = data["X"].shape[0]
+if os.path.exists(train_file):
 
-        sample_index = st.number_input(
-            "Select recorded sample index",
-            min_value=0,
-            max_value=total_samples - 1,
-            value=0,
-            step=1,
-            key="recorded_iq_sample_index",
+    try:
+        with h5py.File(train_file, "r") as data:
+            total_samples = data["X"].shape[0]
+
+            sample_index = st.number_input(
+                "Select recorded sample index",
+                min_value=0,
+                max_value=total_samples - 1,
+                value=0,
+                step=1,
+                key="recorded_iq_sample_index",
+            )
+
+            index = int(sample_index)
+
+            iq_sample = data["X"][index]
+            modulation_label = int(data["y_mod"][index])
+            channel_label = int(data["y_chan"][index])
+            snr_value = int(data["y_snr"][index])
+
+        st.subheader(f"Recorded Sample #{index}")
+
+        st.write("Modulation label:", modulation_label)
+
+        st.write(
+            "Channel condition:",
+            "Clean" if channel_label == 0 else "Multipath",
         )
 
-        index = int(sample_index)
+        st.write("SNR:", f"{snr_value} dB")
 
-        # Read only one sample to avoid loading the full dataset
-        iq_sample = data["X"][index]
-        modulation_label = int(data["y_mod"][index])
-        channel_label = int(data["y_chan"][index])
-        snr_value = int(data["y_snr"][index])
+        st.caption(
+            "Modulation is shown as its numeric dataset label. "
+            "The label-to-modulation mapping must be verified "
+            "from the dataset documentation."
+        )
 
-    st.subheader(f"Recorded Sample #{index}")
+        st.subheader("I/Q Waveform")
 
-    st.write("Modulation label:", modulation_label)
-    st.write(
-        "Channel condition:",
-        "Clean" if channel_label == 0 else "Multipath",
-    )
-    st.write("SNR:", f"{snr_value} dB")
+        st.line_chart({
+            "I (In-phase)": iq_sample[:, 0],
+            "Q (Quadrature)": iq_sample[:, 1],
+        })
 
-    st.caption(
-        "Modulation is shown as its numeric dataset label. "
-        "The label-to-modulation mapping must be verified "
-        "from the dataset documentation."
-    )
+    except Exception as error:
+        st.error(f"Could not load recorded sample: {error}")
 
-    st.subheader("I/Q Waveform")
+else:
 
-    st.line_chart({
-        "I (In-phase)": iq_sample[:, 0],
-        "Q (Quadrature)": iq_sample[:, 1],
-    })
-
-except FileNotFoundError:
-    st.error(
-        "Training file not found. Check that "
-        "dataset/subset_train.h5 exists in the project folder."
+    st.info(
+        "Recorded IQ dataset is not included in the deployed demo "
+        "because the dataset file is large. "
+        "The Recorded IQ analysis is available in the local project version."
     )
 
-except Exception as error:
-    st.error(f"Could not load recorded sample: {error}")
+
+
 
     
 # ==========================================
