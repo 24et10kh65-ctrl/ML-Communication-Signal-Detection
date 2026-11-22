@@ -6,7 +6,17 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import os
 
+st.markdown("""
+<style>
+h1, h2, h3, h4, h5, h6 {
+    color: #ffffff !important;
+}
 
+.stMarkdown p {
+    color: #ffffff !important;
+}
+</style>
+""", unsafe_allow_html=True)
 
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
