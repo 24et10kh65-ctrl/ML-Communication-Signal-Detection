@@ -5,6 +5,38 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import os
 
+st.markdown("""
+<style>
+    /* Main text */
+    .stMarkdown, .stText, p, label {
+        color: #111111 !important;
+    }
+
+    /* Headings */
+    h1, h2, h3, h4, h5, h6 {
+        color: #111111 !important;
+    }
+
+    /* Selectbox and input labels */
+    .stSelectbox label,
+    .stNumberInput label,
+    .stTextInput label {
+        color: #111111 !important;
+    }
+
+    /* Caption text */
+    .stCaption {
+        color: #555555 !important;
+    }
+
+    /* Metric labels and values */
+    [data-testid="stMetricLabel"],
+    [data-testid="stMetricValue"] {
+        color: #111111 !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
