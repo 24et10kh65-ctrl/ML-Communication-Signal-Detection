@@ -3,6 +3,7 @@ import h5py
 import numpy as np
 import streamlit as st
 import matplotlib.pyplot as plt
+import os
 
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
@@ -897,6 +898,21 @@ st.write(
 
 if st.button("Evaluate Model", key="evaluate_real_model"):
     try:
+
+        if not os.path.exists("real_signal_model.joblib"):
+            st.info(
+                "Recorded IQ model is not available in the deployed demo."
+            )
+            st.stop()
+
+        if not os.path.exists("dataset/subset_test.h5"):
+            st.info(
+                "Recorded IQ test dataset is not included in the deployed demo "
+                "because the dataset file is large. "
+                "The evaluation is available in the local project version."
+            )
+            st.stop()
+
         model = joblib.load("real_signal_model.joblib")
 
         with h5py.File("dataset/subset_test.h5", "r") as data:
