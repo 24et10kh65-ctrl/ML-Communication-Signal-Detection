@@ -872,9 +872,10 @@ try:
         )
 
 except FileNotFoundError:
-    st.error(
-        "Model or test dataset not found. "
-        "Check the project folder and dataset paths."
+    st.info(
+        "Recorded IQ model or dataset is not included in the deployed demo "
+        "because the required files are large. "
+        "This feature is available in the local project version."
     )
 
 except Exception as error:
