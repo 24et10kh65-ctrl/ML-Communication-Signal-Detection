@@ -1,22 +1,41 @@
-import joblib
 import h5py
-from matplotlib import style
+import joblib
+import matplotlib.style
 import numpy as np
 import streamlit as st
 import matplotlib.pyplot as plt
 import os
 
+
 st.markdown("""
 <style>
+/* Main headings */
 h1, h2, h3, h4, h5, h6 {
-    color: #ffffff !important;
+    color: #17365d !important;
 }
 
-.stMarkdown p {
-    color: #ffffff !important;
+/* Paragraphs and normal text */
+.stMarkdown p,
+.stMarkdown li,
+.stMarkdown span,
+label,
+[data-testid="stWidgetLabel"] {
+    color: #17365d !important;
+}
+
+/* Sidebar text */
+[data-testid="stSidebar"] {
+    color: #17365d !important;
+}
+
+/* Input labels */
+.stSelectbox label,
+.stSlider label {
+    color: #17365d !important;
 }
 </style>
 """, unsafe_allow_html=True)
+
 
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
